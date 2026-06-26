@@ -1,0 +1,10 @@
+node_modules
+__pycache__
+.git
+.env
+data/uploads
+*.pyc
+.venv
+.idea
+.ruff_cache
+*.egg-info

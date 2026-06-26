@@ -1,0 +1,64 @@
+[project]
+name = "jing"
+version = "1.0.0"
+description = "JING — The Expert Spirit for the Modern Artisan. Multi-agent AI system for blue-collar technicians."
+authors = [{name = "Xavier"}]
+requires-python = ">=3.12"
+readme = "README.md"
+license = "MIT"
+dependencies = [
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.14.1",
+    "loguru>=0.7.3",
+    "openai>=1.55.0",
+    "tenacity>=9.0.0",
+    "httpx>=0.28.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-multipart>=0.0.12",
+    "mcp>=1.0.0",
+    "fastmcp>=0.4.0",
+    "tavily-python>=0.5.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+jing = "jing:main"
+jing-api = "src.api.main:start"
+
+[tool.setuptools]
+packages = [
+    "jing",
+    "src",
+    "src.agents",
+    "src.api",
+    "src.api.routes",
+    "src.core",
+    "src.models",
+    "src.services",
+    "src.utils",
+    "src.prompts",
+]
+
+[tool.setuptools.package-data]
+src = ["py.typed", "prompts/*.md"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+]

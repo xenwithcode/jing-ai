@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t jing:${{ github.sha }} .
+
+      - name: Tag image
+        run: |
+          docker tag jing:${{ github.sha }} jing:latest
+
+      # TODO: Replace with your Alibaba Cloud registry and credentials
+      # - name: Log in to Alibaba Cloud Container Registry
+      #   run: docker login --username=${{ secrets.ALIYUN_USERNAME }} registry.cn-hangzhou.aliyuncs.com
+      #          --password=${{ secrets.ALIYUN_PASSWORD }}
+      #
+      # - name: Push image
+      #   run: |
+      #     docker tag jing:${{ github.sha }} registry.cn-hangzhou.aliyuncs.com/your-namespace/jing:${{ github.sha }}
+      #     docker tag jing:${{ github.sha }} registry.cn-hangzhou.aliyuncs.com/your-namespace/jing:latest
+      #     docker push registry.cn-hangzhou.aliyuncs.com/your-namespace/jing:${{ github.sha }}
+      #     docker push registry.cn-hangzhou.aliyuncs.com/your-namespace/jing:latest
+
+      # TODO: Replace with your Alibaba Cloud ECS deployment steps
+      # - name: Deploy to Alibaba Cloud ECS
+      #   run: |
+      #     ssh ${{ secrets.ALIYUN_HOST }} "
+      #       docker pull registry.cn-hangzhou.aliyuncs.com/your-namespace/jing:latest &&
+      #       docker stop jing || true &&
+      #       docker rm jing || true &&
+      #       docker run -d --name jing -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/your-namespace/jing:latest
+      #     "

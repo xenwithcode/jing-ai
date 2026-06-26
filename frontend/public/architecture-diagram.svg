@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="Inter, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="frontend" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="backend" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EF4444;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="database" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0891B2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="qwen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="agents" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrowDash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="620" rx="12" fill="#0F172A"/>
+  <rect x="1" y="1" width="898" height="618" rx="11" fill="none" stroke="#1E293B" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="450" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#F8FAFC">JING — System Architecture</text>
+  <text x="450" y="56" text-anchor="middle" font-size="11" fill="#64748B">How Qwen Cloud connects to the frontend, backend, and data layer</text>
+
+  <!-- ============================================ -->
+  <!-- LAYER 1: FRONTEND -->
+  <!-- ============================================ -->
+  <rect x="40" y="80" width="820" height="90" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="60" y="100" font-size="11" font-weight="bold" fill="#60A5FA">📱 FRONTEND LAYER</text>
+
+  <rect x="60" y="110" width="180" height="44" rx="8" fill="url(#frontend)"/>
+  <text x="150" y="128" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">React + TypeScript</text>
+  <text x="150" y="144" text-anchor="middle" font-size="10" fill="#BFDBFE">Vite · TailwindCSS</text>
+
+  <rect x="270" y="110" width="180" height="44" rx="8" fill="url(#frontend)"/>
+  <text x="360" y="128" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">Dashboard &amp; Charts</text>
+  <text x="360" y="144" text-anchor="middle" font-size="10" fill="#BFDBFE">Recharts · Framer Motion</text>
+
+  <rect x="480" y="110" width="180" height="44" rx="8" fill="url(#frontend)"/>
+  <text x="570" y="128" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">Diagnosis UI</text>
+  <text x="570" y="144" text-anchor="middle" font-size="10" fill="#BFDBFE">Upload · Signature · Budget</text>
+
+  <rect x="690" y="110" width="150" height="44" rx="8" fill="url(#frontend)"/>
+  <text x="765" y="128" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">API Client</text>
+  <text x="765" y="144" text-anchor="middle" font-size="10" fill="#BFDBFE">Axios · REST</text>
+
+  <!-- Arrow: Frontend → Backend -->
+  <line x1="450" y1="170" x2="450" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrowGray)"/>
+  <text x="460" y="188" font-size="9" fill="#64748B">HTTP REST / WebSocket</text>
+
+  <!-- ============================================ -->
+  <!-- LAYER 2: BACKEND (FASTAPI) -->
+  <!-- ============================================ -->
+  <rect x="40" y="205" width="820" height="170" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="60" y="225" font-size="11" font-weight="bold" fill="#FCA5A5">⚡ API LAYER — FastAPI Backend</text>
+
+  <rect x="60" y="238" width="240" height="60" rx="8" fill="url(#backend)"/>
+  <text x="180" y="258" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">REST API Endpoints</text>
+  <text x="180" y="274" text-anchor="middle" font-size="10" fill="#FECACA">/diagnose · /budget · /artisan/*</text>
+  <text x="180" y="288" text-anchor="middle" font-size="9" fill="#FCA5A5">Pydantic v2 validation</text>
+
+  <rect x="330" y="238" width="240" height="60" rx="8" fill="url(#backend)"/>
+  <text x="450" y="258" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">Agent Orchestrator</text>
+  <text x="450" y="274" text-anchor="middle" font-size="10" fill="#FECACA">4-wave pipeline execution</text>
+  <text x="450" y="288" text-anchor="middle" font-size="9" fill="#FCA5A5">asyncio · Tenacity retry</text>
+
+  <rect x="600" y="238" width="240" height="60" rx="8" fill="url(#backend)"/>
+  <text x="720" y="258" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">MCP Server</text>
+  <text x="720" y="274" text-anchor="middle" font-size="10" fill="#FECACA">Model Context Protocol</text>
+  <text x="720" y="288" text-anchor="middle" font-size="9" fill="#FCA5A5">External tool integration</text>
+
+  <!-- ============================================ -->
+  <!-- LAYER 2b: AGENT SOCIETY -->
+  <!-- ============================================ -->
+  <rect x="60" y="310" width="780" height="52" rx="8" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4"/>
+  <text x="80" y="328" font-size="10" font-weight="bold" fill="#6EE7B7">🤖 Agent Society (8 specialized Qwen-powered agents)</text>
+  
+  <rect x="70" y="338" width="82" height="18" rx="4" fill="url(#agents)"/>
+  <text x="111" y="350" text-anchor="middle" font-size="8" fill="#fff">MASTER</text>
+  <rect x="160" y="338" width="82" height="18" rx="4" fill="url(#agents)"/>
+  <text x="201" y="350" text-anchor="middle" font-size="8" fill="#fff">FOREMAN</text>
+  <rect x="250" y="338" width="70" height="18" rx="4" fill="url(#agents)"/>
+  <text x="285" y="350" text-anchor="middle" font-size="8" fill="#fff">EYE</text>
+  <rect x="328" y="338" width="72" height="18" rx="4" fill="url(#agents)"/>
+  <text x="364" y="350" text-anchor="middle" font-size="8" fill="#fff">SCRIBE</text>
+  <rect x="408" y="338" width="62" height="18" rx="4" fill="url(#agents)"/>
+  <text x="439" y="350" text-anchor="middle" font-size="8" fill="#fff">KIT</text>
+  <rect x="478" y="338" width="80" height="18" rx="4" fill="url(#agents)"/>
+  <text x="518" y="350" text-anchor="middle" font-size="8" fill="#fff">REFEREE</text>
+  <rect x="566" y="338" width="82" height="18" rx="4" fill="url(#agents)"/>
+  <text x="607" y="350" text-anchor="middle" font-size="8" fill="#fff">STEWARD</text>
+  <rect x="656" y="338" width="62" height="18" rx="4" fill="url(#agents)"/>
+  <text x="687" y="350" text-anchor="middle" font-size="8" fill="#fff">VOICE</text>
+  <rect x="726" y="338" width="100" height="18" rx="4" fill="url(#agents)"/>
+  <text x="776" y="350" text-anchor="middle" font-size="8" fill="#fff">FALLBACK</text>
+
+  <!-- Arrow: Backend → Qwen Cloud -->
+  <line x1="250" y1="375" x2="250" y2="410" stroke="#475569" stroke-width="2"/>
+  <line x1="250" y1="410" x2="450" y2="440" stroke="#475569" stroke-width="2" marker-end="url(#arrowGray)"/>
+  <text x="265" y="408" font-size="9" fill="#64748B">OpenAI-compatible SDK</text>
+
+  <!-- Arrow: Backend → Database -->
+  <line x1="720" y1="298" x2="720" y2="440" stroke="#475569" stroke-width="2" marker-end="url(#arrowGray)"/>
+  <text x="730" y="380" font-size="9" fill="#64748B">JSON file I/O</text>
+
+  <!-- ============================================ -->
+  <!-- LAYER 3: QWEN CLOUD -->
+  <!-- ============================================ -->
+  <rect x="40" y="445" width="400" height="150" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="60" y="465" font-size="11" font-weight="bold" fill="#C4B5FD">☁️ QWEN CLOUD (Alibaba Cloud)</text>
+
+  <rect x="60" y="478" width="170" height="50" rx="6" fill="url(#qwen)"/>
+  <text x="145" y="496" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Qwen-Max</text>
+  <text x="145" y="510" text-anchor="middle" font-size="9" fill="#DDD6FE">JING-MASTER</text>
+  <text x="145" y="522" text-anchor="middle" font-size="8" fill="#C4B5FD">$1.04 / 1M tokens</text>
+
+  <rect x="250" y="478" width="170" height="50" rx="6" fill="url(#qwen)"/>
+  <text x="335" y="496" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Qwen-VL-Max</text>
+  <text x="335" y="510" text-anchor="middle" font-size="9" fill="#DDD6FE">JING-EYE (Vision)</text>
+  <text x="335" y="522" text-anchor="middle" font-size="8" fill="#C4B5FD">$1.50 / 1M tokens</text>
+
+  <rect x="60" y="536" width="170" height="50" rx="6" fill="url(#qwen)"/>
+  <text x="145" y="554" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Qwen-Plus</text>
+  <text x="145" y="568" text-anchor="middle" font-size="9" fill="#DDD6FE">SCRIBE · KIT · STEWARD · REFEREE</text>
+  <text x="145" y="580" text-anchor="middle" font-size="8" fill="#C4B5FD">$0.40 / 1M tokens</text>
+
+  <rect x="250" y="536" width="170" height="50" rx="6" fill="url(#qwen)"/>
+  <text x="335" y="554" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Qwen-Audio-Turbo</text>
+  <text x="335" y="568" text-anchor="middle" font-size="9" fill="#DDD6FE">JING-VOICE (Speech)</text>
+  <text x="335" y="580" text-anchor="middle" font-size="8" fill="#C4B5FD">$0.30 / 1M tokens</text>
+
+  <!-- ============================================ -->
+  <!-- LAYER 3b: DATABASE -->
+  <!-- ============================================ -->
+  <rect x="460" y="445" width="400" height="150" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="480" y="465" font-size="11" font-weight="bold" fill="#67E8F9">💾 DATA LAYER (Local Storage)</text>
+
+  <rect x="480" y="478" width="360" height="50" rx="6" fill="url(#database)"/>
+  <text x="660" y="498" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Memory Service (JSON Files)</text>
+  <text x="660" y="514" text-anchor="middle" font-size="9" fill="#CFFAFE">Persistent client &amp; job history</text>
+
+  <rect x="480" y="536" width="170" height="50" rx="6" fill="#164E63" stroke="#0891B2" stroke-width="1"/>
+  <text x="565" y="556" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">jobs.json</text>
+  <text x="565" y="572" text-anchor="middle" font-size="9" fill="#67E8F9">18 demo jobs</text>
+
+  <rect x="670" y="536" width="170" height="50" rx="6" fill="#164E63" stroke="#0891B2" stroke-width="1"/>
+  <text x="755" y="556" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">clients.json</text>
+  <text x="755" y="572" text-anchor="middle" font-size="9" fill="#67E8F9">Client records</text>
+
+  <!-- Arrow: Qwen → Backend (response) -->
+  <line x1="240" y1="445" x2="240" y2="385" stroke="#64748B" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowDash)"/>
+  <text x="200" y="420" font-size="9" fill="#64748B">JSON responses</text>
+
+  <!-- Arrow: Database → Backend (read) -->
+  <line x1="650" y1="445" x2="650" y2="385" stroke="#64748B" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowDash)"/>
+  <text x="600" y="420" font-size="9" fill="#64748B">Read dashboard data</text>
+
+  <!-- Legend -->
+  <rect x="40" y="600" width="12" height="12" rx="2" fill="url(#frontend)"/>
+  <text x="58" y="610" font-size="9" fill="#94A3B8">Frontend</text>
+  <rect x="130" y="600" width="12" height="12" rx="2" fill="url(#backend)"/>
+  <text x="148" y="610" font-size="9" fill="#94A3B8">Backend</text>
+  <rect x="220" y="600" width="12" height="12" rx="2" fill="url(#qwen)"/>
+  <text x="238" y="610" font-size="9" fill="#94A3B8">Qwen Cloud</text>
+  <rect x="330" y="600" width="12" height="12" rx="2" fill="url(#database)"/>
+  <text x="348" y="610" font-size="9" fill="#94A3B8">Data Layer</text>
+  <rect x="440" y="600" width="12" height="12" rx="2" fill="url(#agents)"/>
+  <text x="458" y="610" font-size="9" fill="#94A3B8">AI Agents</text>
+
+  <!-- Arrows legend -->
+  <line x1="560" y1="606" x2="590" y2="606" stroke="#475569" stroke-width="2" marker-end="url(#arrowGray)"/>
+  <text x="595" y="610" font-size="9" fill="#94A3B8">Request</text>
+
+  <line x1="660" y1="606" x2="690" y2="606" stroke="#64748B" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowDash)"/>
+  <text x="695" y="610" font-size="9" fill="#94A3B8">Response / Read</text>
+</svg>
