@@ -1,0 +1,43 @@
+{
+  "function_name": "jing-api",
+  "description": "JING multi-agent AI backend for blue-collar technicians",
+  "runtime": "custom-container",
+  "handler": "index.handler",
+  "memory_size": 512,
+  "timeout": 60,
+  "cpu": 0.5,
+  "disk_size": 512,
+  "environment_variables": {
+    "ENVIRONMENT": "production",
+    "LOG_LEVEL": "INFO",
+    "DEBUG": "false",
+    "QWEN_API_KEY": "****",
+    "QWEN_BASE_URL": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "QWEN_MAX_MODEL": "qwen-max",
+    "QWEN_VL_MODEL": "qwen-vl-max",
+    "QWEN_PLUS_MODEL": "qwen-plus",
+    "QWEN_AUDIO_MODEL": "qwen-audio-turbo",
+    "API_HOST": "0.0.0.0",
+    "API_PORT": "8000",
+    "MAX_CONCURRENT_AGENTS": "5",
+    "AGENT_TIMEOUT_SECONDS": "60",
+    "AGENT_MAX_RETRIES": "3",
+    "MAX_UPLOAD_SIZE_MB": "10"
+  },
+  "triggers": [
+    {
+      "name": "http-trigger",
+      "type": "http",
+      "config": {
+        "authType": "anonymous",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE",
+          "OPTIONS"
+        ]
+      }
+    }
+  ]
+}
