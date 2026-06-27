@@ -310,6 +310,34 @@ jing/
 
 ---
 
+## ☁️ Alibaba Cloud Integration
+
+JING is powered by **Qwen Cloud**, Alibaba Cloud's AI service platform.
+
+### Models Used:
+- **Qwen 3.7-Max** — Strategic planning (JING-MASTER)
+- **Qwen 3.7-Plus** — Vision, text, and audio processing (All other agents)
+
+### Live Demo:
+```bash
+# Test the Alibaba Cloud integration
+uv run python -c "
+from src.services.qwen_client import get_qwen_client
+import asyncio
+client = get_qwen_client()
+response = asyncio.run(client.chat('qwen-plus', 'Diagnose a leaking faucet'))
+print(response)
+"
+```
+
+### Deployment:
+- **Current:** Local development with Qwen Cloud API integration
+- **Production:** Alibaba Cloud Function Compute (planned post-hackathon)
+
+See [`deploy/alibaba_cloud_proof.md`](deploy/alibaba_cloud_proof.md) for detailed evidence of Alibaba Cloud usage.
+
+---
+
 ## 🎯 Why JING Matters
 
 ### For Technicians
