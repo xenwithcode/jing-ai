@@ -1,9 +1,9 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { 
-  CurrencyDollarIcon, 
-  SparklesIcon, ArrowRightIcon, ClockIcon, 
-  UserGroupIcon, CodeBracketIcon, ChartBarIcon 
+import {
+  CurrencyDollarIcon,
+  SparklesIcon, ArrowRightIcon, ClockIcon,
+  UserGroupIcon, CodeBracketIcon, ChartBarIcon
 } from '@heroicons/react/24/outline';
 import MermaidChart from '../components/MermaidChart';
 
@@ -18,7 +18,7 @@ graph TD
     R -->|Wave 3| G[💼 JING-STEWARD]
     G -->|Wave 4| H[🔊 JING-VOICE]
     H --> I[✅ Prepared Artisan]
-    
+
     style A fill:#1F2937,stroke:#DC2626,stroke-width:2px,color:#fff
     style B fill:#DC2626,stroke:#DC2626,stroke-width:2px,color:#fff
     style C fill:#1E40AF,stroke:#1E40AF,stroke-width:2px,color:#fff
@@ -52,7 +52,7 @@ export default function LandingPage() {
             </div>
             <span className="font-bold">JING</span>
           </Link>
-          
+
           <div className="flex items-center space-x-6 text-sm">
             <Link to="/" className="text-white font-medium">Home</Link>
             <Link to="/demo" className="text-gray-400 hover:text-white transition-colors">Demo</Link>
@@ -68,7 +68,7 @@ export default function LandingPage() {
       <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-jing-primary/20 via-gray-950 to-gray-950"></div>
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-        
+
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -123,7 +123,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="text-xl text-gray-400 max-w-2xl mx-auto mb-12"
           >
-            A multi-agent AI society that diagnoses problems, manages finances, 
+            A multi-agent AI society that diagnoses problems, manages finances,
             and empowers blue-collar technicians with the power of Qwen Cloud.
           </motion.p>
 
@@ -143,14 +143,14 @@ export default function LandingPage() {
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-jing-secondary to-jing-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </Link>
-            
+
             <Link
               to="/app?view=upload"
               className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all flex items-center space-x-2"
             >
               <span>Launch JING App</span>
             </Link>
-            
+
             <a
               href="https://github.com/xenwithcode/jing"
               target="_blank"
@@ -177,7 +177,7 @@ export default function LandingPage() {
           >
             <h2 className="text-4xl font-bold mb-4">The Hidden Crisis in Blue-Collar Work</h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Millions of skilled technicians lose hours every day to administrative friction, 
+              Millions of skilled technicians lose hours every day to administrative friction,
               leaving money on the table and frustrating their customers.
             </p>
           </motion.div>
@@ -234,7 +234,7 @@ export default function LandingPage() {
             <span className="text-jing-accent font-bold tracking-wider uppercase text-sm">Track 3: Agent Society</span>
             <h2 className="text-4xl font-bold mt-2 mb-4">A Society of 8 Specialized Agents</h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              JING isn't a single chatbot. It's a multi-agent system where specialized AI workers 
+              JING isn't a single chatbot. It's a multi-agent system where specialized AI workers
               decompose tasks, negotiate dependencies, and collaborate to solve complex real-world problems.
             </p>
           </motion.div>
@@ -308,40 +308,42 @@ export default function LandingPage() {
             className="prose prose-invert prose-lg max-w-none bg-gray-800/30 border border-gray-700 rounded-3xl p-12"
           >
             <p className="text-gray-300 leading-relaxed mb-6">
-              When I started building JING, I wanted to solve a problem I saw firsthand: skilled artisans 
-              are masters of their craft but often struggle with the business and diagnostic side of their work. 
-              I needed an AI system that could <strong>see</strong> what they see, <strong>know</strong> every manual ever written, 
+              When I started building JING, I wanted to solve a problem I saw firsthand: skilled artisans
+              are masters of their craft but often struggle with the business and diagnostic side of their work.
+              I needed an AI system that could <strong>see</strong> what they see, <strong>know</strong> every manual ever written,
               and <strong>manage</strong> their finances.
             </p>
-            
+
             <p className="text-gray-300 leading-relaxed mb-6">
-              <strong>Why Qwen Cloud?</strong> The multimodal capabilities of Qwen-VL-Max for vision diagnosis, 
-              combined with the deep reasoning of Qwen-Max for strategic planning, made it the perfect foundation. 
-              The ability to orchestrate these models through a custom MCP (Model Context Protocol) integration 
+              <strong>Why Qwen Cloud?</strong> The multimodal capabilities of Qwen-VL-Max for vision diagnosis,
+              combined with the deep reasoning of Qwen-Max for strategic planning, made it the perfect foundation.
+              The ability to orchestrate these models through a custom MCP (Model Context Protocol) integration
               allowed me to build a true Agent Society, not just a chain of prompts.
             </p>
 
             <p className="text-gray-300 leading-relaxed mb-6">
-              The biggest challenge was <strong>agent coordination</strong>. Getting JING-MASTER to decompose tasks 
-              and JING-FOREMAN to handle dependencies without hallucinations required rigorous Pydantic validation 
-              and fallback strategies. Qwen Cloud's reliability and low latency made the 11-second end-to-end 
+              The biggest challenge was <strong>agent coordination</strong>. Getting JING-MASTER to decompose tasks
+              and JING-FOREMAN to handle dependencies without hallucinations required rigorous Pydantic validation
+              and fallback strategies. Qwen Cloud's reliability and low latency made the 11-second end-to-end
               diagnosis possible.
             </p>
 
             <p className="text-gray-300 leading-relaxed">
-              JING is more than a hackathon project. It's a blueprint for how multi-agent systems can empower 
+              JING is more than a hackathon project. It's a blueprint for how multi-agent systems can empower
               the real-world workforce. The artisan's hands shape the world; JING is here to shape their day.
             </p>
           </motion.article>
 
           <div className="text-center mt-8">
-            <Link
-              to="/blog"
+            <a
+              href="https://dev.to/xenwithcode/building-jing-how-a-carpenter-used-qwen-cloud-to-create-a-multi-agent-ai-system-for-blue-collar-1imh"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors"
             >
-              <span>Read Full Story</span>
+              <span>Read Full Story on Dev.to</span>
               <ArrowRightIcon className="w-5 h-5" />
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -405,7 +407,7 @@ export default function LandingPage() {
           >
             Ready to empower the modern artisan?
           </motion.h2>
-          
+
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -445,34 +447,34 @@ export default function LandingPage() {
                 <p className="text-xs text-gray-500">The Expert Spirit for the Modern Artisan</p>
               </div>
             </div>
-            
+
             <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <a 
-                href="https://github.com/xenwithcode/jing" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://github.com/xenwithcode/jing"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors flex items-center space-x-1"
               >
                 <span>GitHub</span>
               </a>
-              <a 
-                href="https://qwencloud-ai-hackathon.devpost.com/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://qwencloud-ai-hackathon.devpost.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors flex items-center space-x-1"
               >
                 <span>Devpost</span>
               </a>
-              <a 
-                href="https://qwen.cloud" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://qwen.cloud"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors flex items-center space-x-1"
               >
                 <span>Qwen Cloud</span>
               </a>
-              <a 
-                href="/LICENSE" 
+              <a
+                href="/LICENSE"
                 className="text-gray-400 hover:text-white transition-colors flex items-center space-x-1"
               >
                 <span>MIT License</span>
@@ -489,7 +491,7 @@ export default function LandingPage() {
                 <span className="text-xs font-semibold text-jing-secondary">Powered by Qwen Cloud</span>
               </div>
             </div>
-            
+
             <p className="text-sm text-gray-600 text-center md:text-right">
               Built with ❤️ by <span className="text-gray-400 font-semibold">Xavier Nunez</span> • 2026
             </p>
