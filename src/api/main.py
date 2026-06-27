@@ -10,17 +10,18 @@ Usage:
 
 from contextlib import asynccontextmanager
 from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from src import __version__, PROJECT_TAGLINE
-from src.api.routes.health import router as health_router
-from src.api.routes.diagnose import router as diagnose_router
-from src.api.routes.history import router as history_router
-from src.api.routes.budget import router as budget_router
-from src.api.routes.signature import router as signature_router
+from src import PROJECT_TAGLINE, __version__
 from src.api.routes.artisan import router as artisan_router
+from src.api.routes.budget import router as budget_router
+from src.api.routes.diagnose import router as diagnose_router
+from src.api.routes.health import router as health_router
+from src.api.routes.history import router as history_router
+from src.api.routes.signature import router as signature_router
 from src.core.orchestrator import get_orchestrator
 from src.utils.logger import get_logger
 
@@ -76,7 +77,7 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(health_router, tags=["health"])
+app.include_router(health_router, prefix="/api/v1", tags=["health"])
 app.include_router(diagnose_router, prefix="/api/v1", tags=["diagnose"])
 app.include_router(history_router, prefix="/api/v1", tags=["history"])
 app.include_router(budget_router, prefix="/api/v1", tags=["budget"])
@@ -107,6 +108,7 @@ else:
 
 if __name__ == "__main__":
     import uvicorn
+
     from src.utils.config import settings
 
     uvicorn.run(
