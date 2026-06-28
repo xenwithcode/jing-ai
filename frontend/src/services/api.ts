@@ -127,6 +127,11 @@ export async function getStewardSuggestion(trade?: string): Promise<{ success: b
   return response.data;
 }
 
+export async function askJing(question: string, trade?: string): Promise<{ success: boolean; data: { answer: string } }> {
+  const response = await api.post('/artisan/ask', { question, trade });
+  return response.data;
+}
+
 export async function updateJobStatus(jobId: string, status: string): Promise<{ success: boolean; data: ArtisanJob }> {
   const response = await api.patch(`/artisan/jobs/${jobId}/status`, { status });
   return response.data;

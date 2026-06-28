@@ -245,9 +245,24 @@ export interface DashboardStats {
   revenue_trend: RevenueTrend[];
 }
 
-export interface StewardSuggestion {
+export interface StewardSuggestionItem {
+  category: string;
+  title: string;
   suggestion: string;
   reason: string;
   action: string;
   potential_impact: string;
+}
+
+export interface StewardSuggestion {
+  business_health: string;
+  focus_priority: string;
+  suggestions: StewardSuggestionItem[];
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
 }

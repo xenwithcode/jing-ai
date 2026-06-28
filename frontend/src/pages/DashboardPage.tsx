@@ -1,17 +1,20 @@
-import { useEffect, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   BriefcaseIcon, CurrencyDollarIcon, ChartBarIcon,
   UserGroupIcon, ArrowLeftIcon, SparklesIcon,
   ClockIcon, CheckCircleIcon, ExclamationTriangleIcon,
+  ArrowTrendingUpIcon, LightBulbIcon, ChatBubbleLeftRightIcon,
+  PaperAirplaneIcon, ShieldCheckIcon,
+  BuildingStorefrontIcon, ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from 'recharts';
-import { getArtisanJobs, getStewardSuggestion, seedDemoData } from '../services/api';
-import type { DashboardStats, ArtisanJob, StewardSuggestion } from '../types';
+import { getArtisanJobs, getStewardSuggestion, seedDemoData, askJing } from '../services/api';
+import type { DashboardStats, ArtisanJob, StewardSuggestion, StewardSuggestionItem, ChatMessage } from '../types';
 
 const TRADES = [
   { value: '', label: 'All Trades', icon: '🔧' },
@@ -264,49 +267,298 @@ function JobsTable({ jobs }: { jobs: ArtisanJob[] }) {
   );
 }
 
+const CATEGORY_META: Record<string, { icon: any; color: string; label: string }> = {
+  pricing: { icon: CurrencyDollarIcon, color: 'from-green-600 to-emerald-700', label: 'Pricing' },
+  efficiency: { icon: ClockIcon, color: 'from-blue-600 to-indigo-700', label: 'Efficiency' },
+  growth: { icon: ArrowTrendingUpIcon, color: 'from-purple-600 to-pink-700', label: 'Growth' },
+  clients: { icon: UserGroupIcon, color: 'from-amber-600 to-orange-700', label: 'Clients' },
+  operations: { icon: BuildingStorefrontIcon, color: 'from-teal-600 to-cyan-700', label: 'Operations' },
+};
+
+const PRIORITY_COLORS: Record<string, string> = {
+  pricing: 'bg-green-500/20 text-green-400 border-green-500/30',
+  efficiency: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  growth: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+  clients: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  operations: 'bg-teal-500/20 text-teal-400 border-teal-500/30',
+};
+
 function StewardCard({ suggestion, loading }: { suggestion: StewardSuggestion | null; loading: boolean }) {
   if (loading) {
     return (
       <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 animate-pulse">
         <div className="h-4 bg-gray-700 rounded w-1/3 mb-4" />
         <div className="h-3 bg-gray-700 rounded w-full mb-2" />
-        <div className="h-3 bg-gray-700 rounded w-3/4" />
+        <div className="h-3 bg-gray-700 rounded w-3/4 mb-6" />
+        <div className="grid md:grid-cols-3 gap-4">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="bg-gray-800/50 rounded-xl p-4 h-40" />
+          ))}
+        </div>
       </div>
     );
   }
 
-  if (!suggestion) return null;
+  if (!suggestion || !suggestion.suggestions?.length) return null;
+
+  const focusMeta = CATEGORY_META[suggestion.focus_priority] || CATEGORY_META.growth;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-r from-jing-primary/10 via-gray-900/80 to-jing-secondary/10 rounded-2xl p-6 border border-jing-primary/20 shadow-lg"
+      className="space-y-4"
     >
-      <div className="flex items-start gap-4">
-        <div className="p-3 bg-gradient-to-br from-jing-primary to-jing-secondary rounded-xl shrink-0">
-          <SparklesIcon className="w-6 h-6 text-white" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-bold text-white">JING-STEWARD Suggestion</h3>
-            <span className="text-xs bg-jing-primary/20 text-jing-primary px-2 py-0.5 rounded-full font-medium">AI Advisor</span>
+      {/* Business Health Banner */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-gradient-to-r from-jing-primary/10 via-gray-900/80 to-jing-secondary/10 rounded-2xl p-5 border border-jing-primary/20 shadow-lg"
+      >
+        <div className="flex items-start gap-4">
+          <div className="p-3 bg-gradient-to-br from-jing-primary to-jing-secondary rounded-xl shrink-0 shadow-lg shadow-jing-primary/20">
+            <SparklesIcon className="w-6 h-6 text-white" />
           </div>
-          <p className="text-lg font-semibold text-white mt-2">{suggestion.suggestion}</p>
-          <p className="text-sm text-gray-400 mt-2">{suggestion.reason}</p>
-          <div className="mt-4 flex flex-wrap gap-4">
-            <div className="bg-blue-900/20 border border-blue-800/30 rounded-xl p-3 flex-1 min-w-[200px]">
-              <p className="text-xs text-blue-400 font-medium uppercase tracking-wider">Action</p>
-              <p className="text-sm text-blue-300 font-medium mt-0.5">{suggestion.action}</p>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-bold text-white text-lg">JING-STEWARD Business Coach</h3>
+              <span className="text-xs bg-gradient-to-r from-jing-primary to-red-600 text-white px-2.5 py-0.5 rounded-full font-semibold shadow-sm">AI Advisor</span>
             </div>
-            <div className="bg-green-900/20 border border-green-800/30 rounded-xl p-3 flex-1 min-w-[200px]">
-              <p className="text-xs text-green-400 font-medium uppercase tracking-wider">Expected Impact</p>
-              <p className="text-sm text-green-300 font-medium mt-0.5">{suggestion.potential_impact}</p>
+            <p className="text-base text-gray-200 mt-1.5 leading-relaxed">{suggestion.business_health}</p>
+            <div className="mt-3 flex items-center gap-2">
+              <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Focus Priority:</span>
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${PRIORITY_COLORS[suggestion.focus_priority] || 'bg-gray-700 text-gray-300 border-gray-600'}`}>
+                {React.createElement(focusMeta.icon, { className: 'w-3.5 h-3.5' })}
+                {focusMeta.label}
+              </span>
             </div>
           </div>
         </div>
+      </motion.div>
+
+      {/* Suggestions Grid */}
+      <div className="grid md:grid-cols-3 gap-4">
+        {suggestion.suggestions.map((item, index) => {
+          const meta = CATEGORY_META[item.category] || { icon: LightBulbIcon, color: 'from-gray-600 to-gray-700', label: item.category };
+          const Icon = meta.icon;
+          return (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-gray-900/60 border border-gray-800 rounded-2xl p-5 hover:border-gray-700 hover:bg-gray-900/80 transition-all group"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`p-2 bg-gradient-to-br ${meta.color} rounded-lg shrink-0 shadow-sm`}>
+                  <Icon className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${
+                    item.category === 'pricing' ? 'text-green-400' :
+                    item.category === 'efficiency' ? 'text-blue-400' :
+                    item.category === 'growth' ? 'text-purple-400' :
+                    item.category === 'clients' ? 'text-amber-400' : 'text-teal-400'
+                  }`}>{meta.label}</span>
+                  <p className="text-sm font-bold text-white truncate">{item.title}</p>
+                </div>
+              </div>
+              <p className="text-sm text-gray-300 leading-relaxed mb-3">{item.suggestion}</p>
+              <div className="text-xs text-gray-400 italic mb-3 border-l-2 border-gray-700 pl-3">
+                {item.reason}
+              </div>
+              <div className="space-y-2 pt-3 border-t border-gray-800">
+                <div className="bg-blue-900/20 border border-blue-800/30 rounded-lg p-2.5">
+                  <p className="text-xs text-blue-400 font-semibold uppercase tracking-wider flex items-center gap-1">
+                    <ShieldCheckIcon className="w-3 h-3" /> Action Step
+                  </p>
+                  <p className="text-xs text-blue-200 mt-0.5">{item.action}</p>
+                </div>
+                <div className="bg-green-900/20 border border-green-800/30 rounded-lg p-2.5">
+                  <p className="text-xs text-green-400 font-semibold uppercase tracking-wider flex items-center gap-1">
+                    <ArrowTrendingUpIcon className="w-3 h-3" /> Expected Impact
+                  </p>
+                  <p className="text-xs text-green-200 mt-0.5">{item.potential_impact}</p>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </motion.div>
+  );
+}
+
+function AskJingChat({ trade }: { trade?: string }) {
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: 'welcome',
+      role: 'assistant',
+      content: "Hi! I'm JING-STEWARD, your AI business coach. Ask me anything about your business — pricing advice, performance reports, client insights, or tips to grow. What's on your mind?",
+      timestamp: new Date(),
+    },
+  ]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = async () => {
+    const question = input.trim();
+    if (!question || loading) return;
+
+    const userMsg: ChatMessage = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      content: question,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+    setLoading(true);
+
+    try {
+      const res = await askJing(question, trade);
+      const assistantMsg: ChatMessage = {
+        id: `assistant-${Date.now()}`,
+        role: 'assistant',
+        content: res.data.answer,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, assistantMsg]);
+    } catch {
+      const errorMsg: ChatMessage = {
+        id: `error-${Date.now()}`,
+        role: 'assistant',
+        content: "I'm sorry, I had trouble processing that. Please try rephrasing your question or check that the backend is running.",
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const clearChat = () => {
+    setMessages([
+      {
+        id: 'welcome',
+        role: 'assistant',
+        content: "Hi! I'm JING-STEWARD, your AI business coach. Ask me anything about your business — pricing advice, performance reports, client insights, or tips to grow. What's on your mind?",
+        timestamp: new Date(),
+      },
+    ]);
+  };
+
+  return (
+    <div className="bg-gray-900/50 border border-gray-800 rounded-2xl overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-gray-800 bg-gradient-to-r from-jing-primary/5 to-transparent">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-gradient-to-br from-jing-primary to-jing-secondary rounded-lg shadow-sm">
+            <ChatBubbleLeftRightIcon className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="font-bold text-white text-sm">Ask JING Anything</h3>
+            <p className="text-xs text-gray-500">Your AI business coach — powered by JING-STEWARD</p>
+          </div>
+        </div>
+        <button
+          onClick={clearChat}
+          className="text-xs text-gray-500 hover:text-gray-300 flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:bg-gray-800 transition-all"
+        >
+          <ArrowPathIcon className="w-3.5 h-3.5" />
+          Clear
+        </button>
+      </div>
+
+      {/* Messages */}
+      <div className="h-80 overflow-y-auto p-4 space-y-4 bg-gray-950/50">
+        <AnimatePresence initial={false}>
+          {messages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
+            >
+              <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-sm ${
+                msg.role === 'user'
+                  ? 'bg-gradient-to-br from-jing-primary to-red-600 text-white'
+                  : 'bg-gradient-to-br from-jing-secondary to-blue-700 text-white'
+              }`}>
+                {msg.role === 'user' ? 'U' : 'S'}
+              </div>
+              <div className={`max-w-[80%] ${
+                msg.role === 'user'
+                  ? 'bg-jing-primary/10 border border-jing-primary/20 rounded-2xl rounded-tr-md'
+                  : 'bg-gray-800/50 border border-gray-700/50 rounded-2xl rounded-tl-md'
+              } p-3.5`}>
+                <p className="text-sm text-gray-200 leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                <p className="text-xs text-gray-600 mt-1.5">
+                  {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+          {loading && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex gap-3"
+            >
+              <div className="shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-jing-secondary to-blue-700 flex items-center justify-center shadow-sm">
+                <SparklesIcon className="w-4 h-4 text-white" />
+              </div>
+              <div className="bg-gray-800/50 border border-gray-700/50 rounded-2xl rounded-tl-md p-4">
+                <div className="flex gap-1.5">
+                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input */}
+      <div className="p-4 border-t border-gray-800 bg-gray-900/80">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask about pricing, performance, clients, or growth..."
+            disabled={loading}
+            className="flex-1 bg-gray-800 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm border border-gray-700 focus:outline-none focus:ring-2 focus:ring-jing-primary/50 focus:border-jing-primary/50 transition-all disabled:opacity-50"
+          />
+          <button
+            onClick={handleSend}
+            disabled={!input.trim() || loading}
+            className="bg-gradient-to-r from-jing-primary to-red-600 text-white px-4 py-2.5 rounded-xl hover:shadow-lg hover:shadow-jing-primary/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
+          >
+            <PaperAirplaneIcon className="w-4 h-4" />
+          </button>
+        </div>
+        <p className="text-xs text-gray-600 mt-1.5 text-center">
+          Ask about pricing strategies, profit analysis, client trends, business growth, or anything trade-related
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -463,6 +715,11 @@ export default function DashboardPage() {
 
             {/* Jobs Table */}
             <JobsTable jobs={jobs} />
+
+            {/* Ask JING */}
+            <div className="mt-6">
+              <AskJingChat trade={trade || undefined} />
+            </div>
           </>
         )}
       </main>

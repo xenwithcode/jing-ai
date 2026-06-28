@@ -10,7 +10,6 @@ import json
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from uuid import uuid4
 
 from src.utils.logger import get_logger
 
@@ -175,6 +174,9 @@ class MemoryService:
             jobs = [j for j in jobs if j.get("status", "").lower() == status.lower()]
         jobs.sort(key=lambda j: j.get("date", ""), reverse=True)
         return jobs
+
+    def get_all_clients(self) -> List[Dict]:
+        return self._read_json(CLIENTS_FILE)
 
     def get_dashboard_stats(self, trade: Optional[str] = None) -> Dict[str, Any]:
         jobs = self._read_json(JOBS_FILE)
