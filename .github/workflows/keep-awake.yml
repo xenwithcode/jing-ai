@@ -1,0 +1,19 @@
+name: Keep Render Awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render health endpoint
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://jing-zwlz.onrender.com/api/v1/health)
+          echo "Render health check returned: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "WARNING: Render returned $STATUS"
+            exit 1
+          fi
