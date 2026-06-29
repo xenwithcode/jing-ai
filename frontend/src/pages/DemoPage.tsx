@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   PlayIcon, PauseIcon, ForwardIcon, ArrowLeftIcon,
   CheckCircleIcon, ClockIcon, SparklesIcon, ArrowRightIcon, ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import { DEMO_SCENARIOS, type DemoScenario, type DemoStep } from '../data/demoData';
+import { healthCheck } from '../services/api';
 
 type Phase = 'selecting' | 'playing' | 'complete';
 
@@ -305,6 +306,8 @@ function ScenarioCard({
   onSelect: () => void;
   index: number;
 }) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -315,15 +318,18 @@ function ScenarioCard({
       className="group cursor-pointer bg-gray-900/50 border border-gray-800 rounded-3xl overflow-hidden hover:border-jing-primary/50 transition-all duration-300"
     >
       <div className="h-48 overflow-hidden relative">
-        <img
-          src={scenario.problemImage}
-          alt={scenario.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={(e) => {
-            const target = e.currentTarget;
-            target.style.display = 'none';
-          }}
-        />
+        {imgError ? (
+          <div className="w-full h-full flex items-center justify-center bg-gray-800 text-5xl">
+            {scenario.icon}
+          </div>
+        ) : (
+          <img
+            src={scenario.problemImage}
+            alt={scenario.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={() => setImgError(true)}
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/50 to-transparent" />
         <div className={`absolute top-4 left-4 bg-gradient-to-r ${scenario.gradient} rounded-full px-4 py-1.5 text-sm font-bold shadow-lg`}>
           {scenario.icon} {scenario.title}
@@ -342,6 +348,7 @@ function ScenarioCard({
 }
 
 export default function DemoPage() {
+  const navigate = useNavigate();
   const [phase, setPhase] = useState<Phase>('selecting');
   const [scenario, setScenario] = useState<DemoScenario | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -365,10 +372,10 @@ export default function DemoPage() {
   const advanceStep = useCallback(() => {
     if (scenario && currentStep < scenario.steps.length - 1) {
       setCurrentStep(prev => prev + 1);
-    } else {
-      setPhase('complete');
+    } else if (scenario) {
+      navigate(`/dashboard?demo=true&trade=${scenario.id}`);
     }
-  }, [scenario, currentStep]);
+  }, [scenario, currentStep, navigate]);
 
   useEffect(() => {
     if (phase === 'playing' && !isPaused && !isComplete) {
@@ -384,6 +391,7 @@ export default function DemoPage() {
     setCurrentStep(0);
     setPhase('playing');
     setIsPaused(false);
+    healthCheck().catch(() => {});
   };
 
   const handlePauseToggle = () => setIsPaused(!isPaused);

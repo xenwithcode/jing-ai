@@ -61,6 +61,9 @@ data/clients/
 *.webp
 *.mp3
 *.wav
+!frontend/public/images/demo/*.jpg
+!frontend/public/images/demo/*.jpeg
+!frontend/public/images/demo/*.png
 
 # ══════════════════════════════════════════════════════════════
 # LOGS
