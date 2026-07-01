@@ -12,7 +12,7 @@ Usage:
 
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     QWEN_API_KEY: str = Field(..., description="Qwen Cloud API key")
 
     QWEN_BASE_URL: str = Field(
-        default="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        default="https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
         description="Qwen Cloud API base URL",
     )
 
